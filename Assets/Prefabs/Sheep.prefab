@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5720806757793713851
 Transform:
   m_ObjectHideFlags: 0
@@ -255,6 +255,7 @@ MonoBehaviour:
   flock: {fileID: 0}
   swarmParams: {fileID: 0}
   aggregateVectorObject: {fileID: 0}
+  inPen: 0
   speed: 0
   direction: {x: 0, y: 0, z: 0}
   isAvoidingObject: 0
@@ -270,6 +271,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   canSeeThreat: 0
   underThreat: 0
+  lastPosition: {x: 0, y: 0, z: 0}
   readSpeed: 0
   threatsInVisionInspection: []
   sheepInVisionInspection: []

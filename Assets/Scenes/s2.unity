@@ -980,8 +980,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 190, y: 5, z: 190}
-  m_Center: {x: 0, y: 2.5, z: 0}
+  m_Size: {x: 199, y: 5, z: 199}
+  m_Center: {x: 2, y: 2.5, z: 0}
 --- !u!1 &2103859282
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,13 +1133,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1676136380810854729, guid: a8748b25e8705d643a41ba1bb6e6e35a, type: 3}
+      propertyPath: maxMovespeed
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 2828812363230417044, guid: a8748b25e8705d643a41ba1bb6e6e35a, type: 3}
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2828812363230417044, guid: a8748b25e8705d643a41ba1bb6e6e35a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 47.5
       objectReference: {fileID: 0}
     - target: {fileID: 2828812363230417044, guid: a8748b25e8705d643a41ba1bb6e6e35a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1207,16 +1211,8 @@ PrefabInstance:
       value: Setup
       objectReference: {fileID: 0}
     - target: {fileID: 3900955015523280178, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
-      propertyPath: numDrones
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3900955015523280178, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
-      propertyPath: useHeightVariaion
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3900955015523280178, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
-      propertyPath: useFocusRemainingSheep
-      value: 1
+      propertyPath: enclosingEpsilon
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4478709477676264368, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: nodeRadius
@@ -1293,6 +1289,10 @@ PrefabInstance:
     - target: {fileID: 5067286545507230319, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6015750020958727321, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
+      propertyPath: sheepNeighborDistance
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6802081904508444308, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: target

@@ -258,7 +258,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1079316626}
-  - component: {fileID: 1079316627}
   - component: {fileID: 1079316628}
   m_Layer: 0
   m_Name: World
@@ -285,18 +284,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1079316627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079316625}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e72f68f2db2fc6f41b8deaed0b32fc2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1079316628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1042,6 +1029,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Setup
       objectReference: {fileID: 0}
+    - target: {fileID: 3900955015523280178, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
+      propertyPath: numDrones
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4478709477676264368, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: worldSizeObject
       value: 
@@ -1090,10 +1081,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6015750020958727321, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
-      propertyPath: sheepNum
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 6802081904508444308, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: target
       value: 
@@ -1112,11 +1099,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7339253363760001000, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: spawnBounds.m_Extent.x
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7339253363760001000, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: spawnBounds.m_Extent.z
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7743791467142579865, guid: 2aec9af0aa3a9864393794bc89b213dd, type: 3}
       propertyPath: m_IsActive

@@ -44,6 +44,7 @@ public class Sheep : MonoBehaviour
     //debug
     [SerializeField] bool canSeeThreat;
     [SerializeField] bool underThreat;
+    [SerializeField] Vector3 lastPosition;
     [SerializeField] float readSpeed;
     [SerializeField] List<GameObject> threatsInVisionInspection;
     [SerializeField] List<GameObject> sheepInVisionInspection;
@@ -100,56 +101,44 @@ public class Sheep : MonoBehaviour
         return new Vector3(v.x, 0, v.z);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         threatMomentum -= Time.deltaTime;
         if (Random.Range(0f, 1f) < 0.1f)
         {
             ResetVision();
         }
-        ApplyRules(); 
+        ApplyRules();
         vAggregate.y = 0;
 
         /*transform.rotation = Quaternion.Slerp(transform.rotation,
                                         Quaternion.LookRotation(SetYZero(vAggregate - transform.position)),
                                         swarmParams.maxRotationSpeed * Time.deltaTime);*/
 
-        if (vAggregate.magnitude > swarmParams.maxSpeed)
-        {
-            if(FeelsThreatened || threatMomentum > 0)
-                vAggregate = vAggregate.normalized * swarmParams.maxSpeed;
-            else
-                vAggregate = vAggregate.normalized * swarmParams.lowSpeed;
-        }
+
+        if (FeelsThreatened || threatMomentum > 0)
+            vAggregate = vAggregate.normalized * swarmParams.maxSpeed;
+        else
+            vAggregate = vAggregate.normalized * swarmParams.lowSpeed;
         speed = vAggregate.magnitude;
         direction = vAggregate.normalized;
 
+        var moveDirection = new Vector3(vAggregate.x, 0, vAggregate.z).normalized;
+        var velocity = speed * moveDirection;
+        rb.velocity = Vector3.zero;
+        rb.AddForce(velocity, ForceMode.VelocityChange);
+
+        if (moveDirection != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+
+        //debug 
         if (aggregateVectorObject != null)
         {
             aggregateVectorObject.SetActive(true);
             aggregateVectorObject.transform.position = vAggregate * 3;
         }
-        
-        var st = speed * Time.deltaTime;
-        var moveDirection = new Vector3(vAggregate.x, 0, vAggregate.z).normalized;
-        var velocity = speed * moveDirection;
-        var moveDelta = moveDirection * st;
-        var displacementDelta = moveDirection;
-        //transform.Translate(moveDelta);
-        rb.velocity = Vector3.zero;
-
-        //rb.MovePosition(transform.position + moveDelta);
-
-        rb.AddForce(velocity, ForceMode.VelocityChange);
-
-        //rb.AddForce(- rb.velocity, ForceMode.VelocityChange);
-        //rb.AddForce(displacementDelta, ForceMode.VelocityChange);
-        if (moveDirection != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-
-        //debug 
-        readSpeed = rb.velocity.magnitude;
+        readSpeed = (transform.position - lastPosition).magnitude / Time.fixedDeltaTime;
+        lastPosition = transform.position;
     }
 
     int CompareCloserOfTwo(GameObject a, GameObject b)
@@ -238,6 +227,7 @@ public class Sheep : MonoBehaviour
         int numSheep = 0;
         int numSheepSeparation = 0;
         Vector3 sumDirection = Vector3.zero;
+
         // 3 boid forces
         foreach (var sheep in flock.sheepHerd)
         {
@@ -245,6 +235,7 @@ public class Sheep : MonoBehaviour
             if (sheep.Equals(gameObject)) continue;
 
             float distance = (sheep.transform.position - transform.position).magnitude;
+
             if (distance > swarmParams.sheepNeighborDistance) continue;
             numSheep++;
             vCentre += sheep.transform.position;
@@ -272,11 +263,10 @@ public class Sheep : MonoBehaviour
             else vCentre = transform.position;
 
 
-        if (FeelsThreatened)
+        if (!FeelsThreatened)
             vCohesion = swarmParams.cohesionWeightBoid * (vCentre - transform.position).normalized;
         else
             vCohesion = swarmParams.cohesionWeightUnderThreat * (vCentre - transform.position).normalized;
-
 
         if (numSheepSeparation != 0)
             vSeparation /= numSheepSeparation;
@@ -296,12 +286,9 @@ public class Sheep : MonoBehaviour
         if (objectsInVision.ContainsKey("threat")) {
             foreach (var threat in objectsInVision["threat"])
             {
-                /*
-                float distance = (threat.transform.position - transform.position).magnitude;
-                if (distance > swarmParams.threatDetectionDistance) 
-                    continue;*/
-
-                vPredatorAvoidance -= threat.transform.position - transform.position;
+                var diff = threat.transform.position - transform.position;
+                var mag = diff.magnitude;
+                vPredatorAvoidance -=  diff;
                 numPredators++;
             }
         }
@@ -314,6 +301,7 @@ public class Sheep : MonoBehaviour
 
         avoidanceRaysInspection = new List<Vector3>();
         // obstacle avoidance behaviour
+
         if (Physics.Raycast(transform.position, transform.forward, 
             swarmParams.obstacleAvoidanceCheckDistance, 
             LayerMask.GetMask("obstacle")))
@@ -322,14 +310,6 @@ public class Sheep : MonoBehaviour
             Vector3 sumMoveVec = Vector3.zero;
             foreach (Ray ray in ObstacleAvoidanceRays)
             {
-                //print(ray);
-                /*
-                if (Physics.Raycast(transform.position, ray.direction, 
-                    swarmParams.obstacleAvoidanceCheckDistance)) {
-                    sumMoveVec -= ray.direction;
-                    avoidanceRaysInspection.Add(ray.direction);
-                }
-                */
                 if (!Physics.Raycast(transform.position, ray.direction,
                     swarmParams.obstacleAvoidanceCheckDistance, 
                     LayerMask.GetMask("obstacle")))
@@ -339,7 +319,6 @@ public class Sheep : MonoBehaviour
                     break;
                 }
             }
-            //print(sumMoveVec);
             vObjectAvoidance = swarmParams.obstacleAvoidanceWeightBoid * sumMoveVec.normalized;
         }
         else {

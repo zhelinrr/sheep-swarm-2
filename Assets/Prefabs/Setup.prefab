@@ -222,20 +222,20 @@ MonoBehaviour:
   maxSpeed: 4
   lowSpeed: 1.5
   sheepNum: 20
-  threatDetectionDistance: 15
-  sheepNeighborDistance: 10
+  threatDetectionDistance: 20
+  sheepNeighborDistance: 30
   neighborNumber: 12
-  cohesionWeightBoid: 2
-  alignmentWeightBoid: 8
-  separationWeightBoid: 8
-  cohesionWeightUnderThreat: 4
+  cohesionWeightBoid: 0
+  alignmentWeightBoid: 16
+  separationWeightBoid: 12
+  cohesionWeightUnderThreat: 10
   alignmentWeightUnderThreat: 16
-  separationWeightUnderThreat: 4
+  separationWeightUnderThreat: 2
   separationDistanceBoid: 4
   separationDistanceUnderThreat: 1.5
-  obstacleAvoidanceWeightBoid: 500
+  obstacleAvoidanceWeightBoid: 100
   obstacleAvoidanceCheckDistance: 15
-  predationAvoidanceWeightBoid: 30
+  predationAvoidanceWeightBoid: 25
   randomMovementWeight: 1
   randomMovementChance: 0.2
   randomMovementWeightUnderThreat: 0.05
@@ -877,6 +877,7 @@ MonoBehaviour:
   arcPositions: []
   steeringDirection_: {x: 0, y: 0, z: 0}
   droneTargetPositions: []
+  _state: 0
   updateIntervalSecond: 0.25
   updateTimerSecond: 0
 --- !u!114 &3900955015523280178
@@ -891,11 +892,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d30d9dd23db9f5440a2719e725f0983d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numDrones: 3
+  numDrones: 2
   highSpeed: 15
-  lowSpeed: 10
+  lowSpeed: 8
   verticalSpeed: 3
-  avoidingHeight: 15
+  avoidingHeight: 21
   chasingHeight: 4
   boundingRadius: 0
   enclosingEpsilon: 0
@@ -903,7 +904,7 @@ MonoBehaviour:
   droneBase: {x: 0, y: 4, z: 0}
   droneSpawnExtent: {x: 5, y: 5}
   allowedDistOffset: 0
-  boundingRadiusProportion: 0.95
+  boundingRadiusProportion: 1
   useHeightVariaion: 0
   useFocusRemainingSheep: 1
 --- !u!1 &8022503154284661935

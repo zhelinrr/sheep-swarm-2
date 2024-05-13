@@ -21,11 +21,14 @@ public class Drone : Threat
     [SerializeField] Vector3 diff;
     [SerializeField] public bool lifting;
 
+    // debug
+    [SerializeField]Vector3 lastPosition;
+    [SerializeField]float readSpeed;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
-    private void Update()
+    private void FixedUpdate()
     {
 
         rb.velocity = Vector3.zero;
@@ -49,7 +52,7 @@ public class Drone : Threat
             if (droneManager.droneCommandState == DroneCommandState.Drive)
                 speed = droneParams.lowSpeed;
             
-            var deltaDist = speed * Time.deltaTime;
+            var deltaDist = speed * Time.fixedDeltaTime;
 
             moveDir.y = 0;
             moveDir = diff.normalized;
@@ -69,7 +72,7 @@ public class Drone : Threat
             Vector3 verticalMoveVec = Vector3.zero;
             float targetHeight = TargetHeight();
             float verticalDiff = targetHeight - transform.position.y;
-            var verticalDeltaDist = droneParams.verticalSpeed * Time.deltaTime;
+            var verticalDeltaDist = droneParams.verticalSpeed * Time.fixedDeltaTime;
             if (Mathf.Abs(verticalDiff) > 0.3)
             {
                 var vSpeed = droneParams.verticalSpeed;
@@ -94,6 +97,10 @@ public class Drone : Threat
 
             }
         }
+
+        //debug 
+        readSpeed = (transform.position - lastPosition).magnitude / Time.fixedDeltaTime;
+        lastPosition = transform.position;
     }
 
 

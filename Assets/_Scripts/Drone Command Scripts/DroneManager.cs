@@ -31,6 +31,7 @@ public class DroneManager : MonoBehaviour
 	[SerializeField] List<Vector3> arcPositions = new();
 	[SerializeField] Vector3 steeringDirection_;
 	[SerializeField] List<Vector3> droneTargetPositions = new();
+	[SerializeField] DroneCommandState _state;
 
 	public float ArcAngle { get { return (float)Math.PI * droneParams.numDrones / (droneParams.numDrones + 1); } }
 
@@ -89,7 +90,6 @@ public class DroneManager : MonoBehaviour
 		updateTimerSecond -= updateIntervalSecond;
 
 		bool n = flock.NeedsRecollection();
-		//print(n);
 
         if (n)
 		{
@@ -103,6 +103,8 @@ public class DroneManager : MonoBehaviour
 
 		ApplyRules();
 
+		// debug
+		_state = droneCommandState;
 	}
 
 	private void ApplyRules()
@@ -137,7 +139,6 @@ public class DroneManager : MonoBehaviour
 
         if (droneCommandState == DroneCommandState.Drive)
 		{
-			
 
             droneParams.boundingRadius = flock.BoundingRadius(0.99f);
 			var steeringDirection2d = new Vector2(steeringDirection.x, steeringDirection.z);
@@ -145,15 +146,11 @@ public class DroneManager : MonoBehaviour
 			arcPositions = GreedyDistanceAllocation(
 				ArcForm(droneParams.boundingRadius, ArcAngle, steeringDirection2d, droneParams.numDrones, droneParams.enclosingEpsilon), 
 				dronePositions);
-			
 
 			for (int i = 0; i < drones.Count; i++)
 			{
-				droneTargetPositions.Add(flock.FlockCentre + arcPositions[i]);// + droneParams.droneBase.y * Vector3.up);
-				//Debug.Log($"drone {i}: {drones[i].targetPoint}");
+				droneTargetPositions.Add(flock.FlockCentre + arcPositions[i]);
 			}
-			// debug
-			steeringDirection_ = steeringDirection;
 		}
 
 		else if (droneCommandState == DroneCommandState.Collect) {
@@ -186,7 +183,8 @@ public class DroneManager : MonoBehaviour
         }
     }
 	
-    public List<Vector3> ArcForm(float radius, float arcAngleRadians, Vector2 steerDirection2d, int numDrones, float epsilon) {
+    public List<Vector3> ArcForm(float radius, float arcAngleRadians, Vector2 steerDirection2d, int numDrones, float e) {
+
 
 		//Debug.Log(steerDirection2d);
 		Vector3 steerDirection = new Vector3 (steerDirection2d.x, 0, steerDirection2d.y);
@@ -197,10 +195,15 @@ public class DroneManager : MonoBehaviour
 
 		float[] distr = new float[numDrones];
 		Vector3[] directionDistr = new Vector3[numDrones];
-		for (int i = 0; i < numDrones; i++) {
-			distr[i] = (float)i / (numDrones - 1);
-			directionDistr[i] = Vector3.Slerp(startDirection, endDirection, distr[i]).normalized;
-			directionDistr[i] *=  radius + epsilon;
+		if (numDrones > 1)
+			for (int i = 0; i < numDrones; i++)
+			{
+				distr[i] = (float)i / (numDrones - 1);
+				directionDistr[i] = Vector3.Slerp(startDirection, endDirection, distr[i]).normalized;
+				directionDistr[i] *= radius + e;
+			}
+		else {
+			directionDistr[0] = -steerDirection * (radius + e);
 		}
 
 		var output = new List<Vector3>();
